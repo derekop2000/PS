@@ -1,0 +1,27 @@
+#include <iostream>
+#include<sstream>
+#include<vector>
+#include<algorithm>
+#include<queue>
+#include<string>
+#include<memory>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    int** arr = new int*[n+1];
+    for(int i=0;i<=n;i++)
+        arr[i] = new int[3];
+    arr[0][0]=0;
+    arr[0][1]=1;
+    arr[0][2]=0;
+    for(int i=1;i<=n;i++)
+    {
+        arr[i][0] = (arr[i-1][1]+arr[i-1][2])%9901;
+        arr[i][1] = (arr[i-1][0] +arr[i-1][1]+arr[i-1][2])%9901;
+        arr[i][2] = (arr[i-1][1]+arr[i-1][0])%9901;
+    }
+    cout << (arr[n][0]+arr[n][1]+arr[n][2])%9901;
+}
