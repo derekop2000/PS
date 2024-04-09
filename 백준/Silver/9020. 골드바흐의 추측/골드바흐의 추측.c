@@ -1,0 +1,2 @@
+#include <stdio.h>
+int main(){int a,t,n;char arr[10001] = { 1,1 };for (a = 2; a <= 5000; a++)if (arr[a] == 0)for (t = a + a; t <= 10000; t += a)arr[t] = 1;scanf("%d", &t);while (t--){scanf("%d", &n);a = n / 2;while (1){if (arr[a] == 0 && arr[n - a] == 0)break;else a--;}printf("%d %d\n", a, n - a);}}
