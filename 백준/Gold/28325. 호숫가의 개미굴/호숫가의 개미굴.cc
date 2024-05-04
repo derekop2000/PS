@@ -18,29 +18,34 @@ int main()
 	int n;
 	cin >> n;
 	int ans = 0;
-	vector<int> can(n, -1);
+	vector<int> v;
 	for (int i = 0; i < n; i++)
 	{
 		int temp;
 		cin >> temp;
 		if (temp > 0)
 		{
+			v.push_back(i);
 			ans += temp;
-			can[i] = 0;
 		}
 	}
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < (int)v.size() - 1; i++)
 	{
-		if (can[i] == 0)continue;
-		int b = (i + n - 1) % n;
-		int f = (i + 1) % n;
-		if (can[b] == 1 || can[f] == 1)
-			can[i] = 0;
-		else
-		{
-			can[i] = 1;
-			ans++;
-		}
+		int temp = v[i + 1] - v[i]-1;
+		if (temp < 1)continue;
+		ans++;
+		ans += (temp - 1) / 2;
+	}
+	int temp;
+	if (v.size() > 0)
+	{
+		temp = (v[0] - 0) + (n - v[v.size() - 1] - 1);
+	}
+	else temp = n-1;
+	if (temp >= 1)
+	{
+		ans++;
+		ans += (temp - 1) / 2;
 	}
 	cout << ans;
 }
