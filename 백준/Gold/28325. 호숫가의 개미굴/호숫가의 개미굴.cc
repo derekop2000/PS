@@ -17,35 +17,39 @@ int main()
 {
 	int n;
 	cin >> n;
-	int ans = 0;
+	long long int ans = 0;
 	vector<int> v;
+	int cnt = 0;
 	for (int i = 0; i < n; i++)
 	{
-		int temp;
+		long long int temp;
 		cin >> temp;
 		if (temp > 0)
 		{
+			cnt++;
 			v.push_back(i);
 			ans += temp;
 		}
 	}
-	for (int i = 0; i < (int)v.size() - 1; i++)
+	if (cnt == n)
 	{
-		int temp = v[i + 1] - v[i]-1;
-		if (temp < 1)continue;
-		ans++;
-		ans += (temp - 1) / 2;
+
 	}
-	int temp;
-	if (v.size() > 0)
+	else if (cnt == 0)
 	{
-		temp = (v[0] - 0) + (n - v[v.size() - 1] - 1);
+		ans = n / 2;
 	}
-	else temp = n-1;
-	if (temp >= 1)
+	else
 	{
-		ans++;
-		ans += (temp - 1) / 2;
+
+		for (int i = 0; i < (int)v.size() - 1; i++)
+		{
+			int temp = v[i + 1] - v[i]-1;
+			if (temp < 1)continue;
+			ans += (temp +1) / 2;
+		}
+		int temp = (v[0] - 0) + (n - v[v.size() - 1] - 1);
+		ans += (temp +1) / 2;
 	}
 	cout << ans;
 }
