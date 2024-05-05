@@ -15,17 +15,18 @@ using namespace std;
 
 int main(void)
 {
-	long long n, m, r, l, mid, sum, ans;
+	int n, m;
+	long long r, l, mid, sum, ans;
 	cin >> n >> m;
 	vector<int> v(n);
 	for (int i = 0; i < n; i++)
 		cin >> v[i];
-	r = 1e18;
-	ans = 1e18;
+	r = (long long int)m * v[0];
+	ans = r;
 	l = 0;
-	while (r >= l)
+	while (l<=r)
 	{
-		mid = (r + l) / 2;
+		mid = (l+r) / 2;
 		sum = 0;
 		for (int i = 0; i < n; i++)
 		{
