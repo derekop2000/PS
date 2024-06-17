@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <algorithm>
 
 using namespace std;
@@ -9,8 +8,9 @@ int main()
 {
     int t;
     cin >> t;
-    long long int ans = 0;
+    long long ans = 0;
     vector<pair<int, int>> ranges;
+
     while (t--)
     {
         int n;
@@ -18,52 +18,48 @@ int main()
         vector<int> arr(n);
         for (int i = 0; i < n; i++)
             cin >> arr[i];
-        
-        long long int serveAns = arr[0];
-        pair<int, int> range = {0, 0};
-        long long int currentSum = arr[0];
-        int startIdx = 0;
 
+        vector<pair<int, int>> dp(n);
+        dp[0] = { arr[0], 0 };
+        long long serveAns = arr[0];
+        pair<int, int> range = { 0, 0 };
+        
         for (int i = 1; i < n; i++)
         {
-            if (currentSum + arr[i] > arr[i])
+            if (arr[i] + dp[i - 1].first > arr[i])
             {
-                currentSum += arr[i];
+                dp[i] = { arr[i] + dp[i - 1].first, dp[i - 1].second };
             }
             else
             {
-                currentSum = arr[i];
-                startIdx = i;
+                dp[i] = { arr[i], i };
             }
 
-            if (currentSum > serveAns)
+            if (dp[i].first > serveAns)
             {
-                serveAns = currentSum;
-                range = {startIdx, i};
+                serveAns = dp[i].first;
+                range = { dp[i].second, i };
             }
-            else if (currentSum == serveAns)
+            else if (dp[i].first == serveAns)
             {
-                int currentLength = i - startIdx;
+                int currentLength = i - dp[i].second;
                 int bestLength = range.second - range.first;
-                if (currentLength < bestLength)
+                
+                if (currentLength < bestLength || (currentLength == bestLength && (dp[i].second < range.first || (dp[i].second == range.first && i < range.second))))
                 {
-                    range = {startIdx, i};
-                }
-                else if (currentLength == bestLength)
-                {
-                    if (startIdx < range.first || (startIdx == range.first && i < range.second))
-                    {
-                        range = {startIdx, i};
-                    }
+                    range = { dp[i].second, i };
                 }
             }
         }
         ranges.push_back(range);
         ans += serveAns;
     }
+    
     cout << ans << "\n";
     for (auto a : ranges)
     {
         cout << a.first + 1 << " " << a.second + 1 << "\n";
     }
+
+    return 0;
 }
