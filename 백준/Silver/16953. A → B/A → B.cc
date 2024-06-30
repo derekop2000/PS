@@ -35,7 +35,7 @@ bool IsUnion(int a, int b)
 
 int main()
 {
-	long long int a, b;
+	int a, b;
 	cin >> a >> b;
 	queue<pair<long long int,int>> q;
 	q.push({a,1});
