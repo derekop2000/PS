@@ -37,32 +37,16 @@ bool IsUnion(int a, int b)
 vector<vector<int>> arr;
 vector<vector<int>> arr2;
 vector<int> points;
-vector<bool> visit;
-void s(int node);
-void s2(int node);
 
 void f(int node)
 {
-	if (visit[node])
-		return;
-	if (arr2[node].size() == 0)
-		s(node);
-	for (int i = 0; i < arr2[node].size(); i++)
-	{
-		int next = arr2[node][i];
-		f(next);
-	}
-}
-void s(int node)
-{
-	visit[node] = true;
 	for (int i = 0; i < arr[node].size(); i++)
 	{
 		int next = arr[node][i];
 		if (points[next] > points[node])
 			continue;
 		points[next] = points[node]+1;
-		s(next);
+		f(next);
 	}
 	for (int i = 0; i < arr2[node].size(); i++)
 	{
@@ -70,23 +54,10 @@ void s(int node)
 		if (points[back] < points[node])
 			continue;
 		points[back] = points[node] - 1;
-		s(back);
+		f(back);
 	}
 }
-void s2(int node)
-{
-	if (visit[node])
-		return;
-	visit[node] = true;
-	
-	for (int i = 0; i < arr[node].size(); i++)
-	{
-		int next = arr[node][i];
-		if (visit[next])
-			continue;
-		s(next);
-	}
-}
+
 int main()
 {
 	int n, m;
@@ -94,7 +65,6 @@ int main()
 	arr.resize(n);
 	arr2.resize(n);
 	points.resize(n);
-	visit.resize(n);
 	for (int i = 0;i < m; i++)
 	{
 		int a, b;
@@ -105,7 +75,7 @@ int main()
 		points[a]++;
 	}
 	for (int i = 0; i < n; i++)
-		s(i);
+		f(i);
 	priority_queue<pair<int, int>, vector<pair<int, int>>,greater<pair<int,int>>> q;
 	for (int i = 0; i < n; i++)
 	{
