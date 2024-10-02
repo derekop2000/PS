@@ -38,57 +38,38 @@ int main()
 	int n;
 	cin >> n;
 	vector<vector<int>> arr(n, vector<int>(n));
+	vector<vector<pair<long long int,long long int>>> dp(n, vector<pair<long long int,long long int>>(n));
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < n; j++)
 			cin >> arr[i][j];
-
-	queue<tuple<int, int,int,int>> q;
-	vector<int> ans(2*n-1);
-	q.push({ 0,0,0,0}); // y,x,index,pre_value
-	while (q.empty()==false)
-	{
-		auto now = q.front(); q.pop();
-		int y = get<0>(now);
-		int x = get<1>(now);
-		int index = get<2>(now);
-		int preValue = get<3>(now);
-		if (index>0 &&preValue < ans[index - 1])
-			continue;
-		if (arr[y][x] < ans[index])
-			continue;
-		if (arr[y][x] == 1)
-			ans[index] = 1;
-		//
+	dp[n - 1][n - 1].first = 1;
+	for(int i=n-1;i>=0;i--)
+		for (int j = n - 1; j >= 0; j--)
 		{
-			int yy = y + 1;
-			int xx = x;
-			if (0 <= yy && yy < n && 0 <= xx && xx < n)
+			long long int value = 0;
 			{
-				int index2 = index + 1;
-				int value = arr[yy][xx];
-				q.push({ yy,xx,index + 1,arr[y][x] });
+				int y = i;
+				int x = j + 1;
+				if (x < n)
+				{
+					dp[i][j].first = dp[y][x].first * 2;
+					value = max(value, dp[y][x].second);
+				}
 			}
-		}
-		//
-		{
-			int yy = y;
-			int xx = x+1;
-			if (0 <= yy && yy < n && 0 <= xx && xx < n)
 			{
-				int index2 = index + 1;
-				int value = arr[yy][xx];
-				q.push({ yy,xx,index + 1,arr[y][x] });
+				int y = i+1;
+				int x = j;
+				if (y < n)
+				{
+					dp[i][j].first = dp[y][x].first * 2;
+					value = max(value, dp[y][x].second);
+				}
 			}
+			long long int value2 = 0;
+			if (arr[i][j])
+				value2 = dp[i][j].first;
+			dp[i][j].second = value + value2;
 		}
-	}
-	int sum = 0;
-	int v = 1;
-	for (int i = ans.size()-1; i >= 0; i--)
-	{
-		if (ans[i])
-			sum += v;
-		v *= 2;
-	}
-	cout << sum;
+	cout << dp[0][0].second;
 }
 
