@@ -34,7 +34,7 @@ bool IsUnion(int a, int b)
 }
 
 vector<vector<int>> arr;
-vector<vector<vector<bool>>> visit;
+vector<vector<bool>> visit;
 vector<pair<int, int>> arr2;
 int n, m;
 
@@ -46,7 +46,6 @@ bool f()
 	queue<tuple<int, int, int>> q;
 	for (int i = 0; i < 4; i++)
 	{
-		visit[arr2.back().first][arr2.back().second][i] = true;
 		q.push({ arr2.back().first,arr2.back().second ,i });
 	}
 	arr2.pop_back();
@@ -58,20 +57,17 @@ bool f()
 		int x = get<1>(current) + dir[d][1];
 		if (0 <= y && y < n && 0 <= x && x < m)
 		{
-			if (visit[y][x][((d+2)%4)])
-				continue;
+			visit[y][x] = true;
 			int value = arr[y][x];
 			switch (value)
 			{
 			case 0:
 			{
-				visit[y][x][d] = true;
 				q.push({ y,x,d });
 				break;
 			}
 			case 1:
 			{
-				visit[y][x][d] = true;
 				if (d == 0 || d == 2)
 				{
 					q.push({ y,x,d });
@@ -80,7 +76,6 @@ bool f()
 			}
 			case 2:
 			{
-				visit[y][x][d] = true;
 				if (d == 1 || d == 3)
 				{
 					q.push({ y,x,d });
@@ -100,7 +95,6 @@ bool f()
 					d = 3;
 				}
 				else d = 2;
-				visit[y][x][d] = true;
 				q.push({ y,x,d });
 				break;
 			}
@@ -117,7 +111,6 @@ bool f()
 					d = 1;
 				}
 				else d = 0;
-				visit[y][x][d] = true;
 				q.push({ y,x,d });
 				break;
 			}
@@ -135,7 +128,7 @@ int main()
     ios::sync_with_stdio(0);cin.tie(0);
 	cin >> n >> m;
 	arr.resize(n, vector<int>(m));
-	visit.resize(n, vector<vector<bool>>(m, vector<bool>(4)));
+	visit.resize(n, vector<bool>(m, false));
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < m; j++)
 		{
@@ -143,6 +136,7 @@ int main()
 			if (arr[i][j] == 9)
 			{
 				arr2.push_back({ i,j });
+				visit[i][j] = true;
 			}
 		}
 	while (f() == true)
@@ -152,13 +146,9 @@ int main()
 	int cnt = 0;
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < m; j++)
-			for (int q = 0; q < 4; q++)
-			{
-				if (visit[i][j][q])
-				{
-					cnt++;
-					break;
-				}
-			}
+			if (visit[i][j])
+				cnt++;
 	cout << cnt;
 }
+
+
