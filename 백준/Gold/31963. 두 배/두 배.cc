@@ -67,6 +67,7 @@ int main()
 	int minIdx = 0;
 	int preValue = 1;
 	int ans = 0;
+
 	for (int i = 0; i < n; i++)
 	{
 		int temp;
@@ -85,9 +86,10 @@ int main()
 			if (temp < preValue)
 			{
 				++ans;
+				++minIdx;
 				temp *= 2;
-				preValue = temp;
 			}
+			preValue = max(preValue, temp);
 		}
 	}
 	cout << ans;
