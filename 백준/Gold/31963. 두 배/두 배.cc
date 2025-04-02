@@ -40,57 +40,49 @@ int main()
 {
 	int n;
 	cin >> n;
-	vector<int> preArr(31);
-	preArr[0] = 1;
-	for (int i = 1; i <= 30; i++)
-		preArr[i] = preArr[i - 1] * 2;
-	auto f = [&preArr](int temp)
+	vector<int64_t> arr(n);
+	vector<int64_t> arr2(n);
+	auto f = [](int idx1, int idx2)
 		{
-			int l = 0;
-			int r = 30;
-			int re = -1;
-			while (l <= r)
+			int cnt = 0;
+			if (idx1 <= idx2)
 			{
-				int mid = (l + r) / 2;
-				if (preArr[mid] <= temp)
+				cnt = 1;
+				while (idx1 <= idx2)
 				{
-					re = mid;
-					l = mid + 1;
-				}
-				else
-				{
-					r = mid - 1;
+					cnt--;
+					idx1 <<= 1;
 				}
 			}
-			return re;
+			else
+			{
+				cnt = 0;
+				while (idx1 > idx2)
+				{
+					cnt++;
+					idx2 <<= 1;
+				}
+			}
+			return cnt;
 		};
-	int minIdx = 0;
-	int preValue = 1;
-	int ans = 0;
-
 	for (int i = 0; i < n; i++)
 	{
-		int temp;
-		cin >> temp;
-		int idx = f(temp);
-		if (idx > minIdx)
+		cin >> arr[i];
+		if (i != 0)
 		{
-			minIdx = idx;
-			preValue = temp;
+			arr2[i] = f(arr[i - 1], arr[i]);
 		}
-		else
-		{
-			int dis = minIdx - idx;
-			ans += dis;
-			temp *= preArr[dis];
-			if (temp < preValue)
-			{
-				++ans;
-				++minIdx;
-				temp *= 2;
-			}
-			preValue = max(preValue, temp);
-		}
+	}
+	int64_t ans = 0;
+	int64_t last = 0;
+	for (auto temp : arr2)
+	{
+		int64_t temp2 = last + temp;
+		if (temp2 > 0)
+			ans += temp2;
+		last = temp2;
+		if (last < 0)
+			last = 0;
 	}
 	cout << ans;
 }
